@@ -1,6 +1,6 @@
 
 module.exports = {
-    base:"/Job_TASK/",
+    base: "/Job_TASK/",
     description: "Job_TASK",
     title: "Job_TASK",
     theme: 'reco',
@@ -73,6 +73,17 @@ module.exports = {
         type: 'blog',
         sidebar: 'auto',//在所有页面中启用自动生成侧栏
         author: 'hayes',
+        // 博客配置
+        // blogConfig: {
+        //     category: {
+        //         location: 2,     // 在导航栏菜单中所占的位置，默认2
+        //         text: 'Category' // 默认文案 “分类”
+        //     },
+        //     tag: {
+        //         location: 3,     // 在导航栏菜单中所占的位置，默认3
+        //         text: 'Tag'      // 默认文案 “标签”
+        //     }
+        // },
         lastUpdated: '上次更新',
         // 密钥
         keyPage: {

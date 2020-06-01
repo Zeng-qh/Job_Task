@@ -1,3 +1,17 @@
+---
+title: Sql
+date: 2020-06-01
+# keys:
+#  - '123456' 
+publish: true
+---
+:::tip
+记录日常工作任务
+:::
+![img]()
+
+<!-- more -->
+
 ```sql 生成海关成品资料
 -- use Demo
 -- select * from Table_1
