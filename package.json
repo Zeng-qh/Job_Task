@@ -11,5 +11,9 @@
   },
   "keywords": [],
   "author": "都一样 <976272457@qq.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "vuepress": "^1.5.0",
+    "vuepress-theme-reco": "^1.4.5"
+  }
 }
