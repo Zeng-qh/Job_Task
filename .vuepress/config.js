@@ -1,6 +1,6 @@
 
 module.exports = {
-    base: "/Job_TASK/",
+    base: "/job_task/",
     description: "Job_TASK",
     title: "Job_TASK",
     theme: 'reco',
