@@ -1,0 +1,15 @@
+{
+  "name": "task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": "git@github.com:Zeng-qh/Job_Task.git",
+  "scripts": {
+    "dev": "vuepress dev",
+    "build": "vuepress build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "都一样 <976272457@qq.com>",
+  "license": "ISC"
+}
