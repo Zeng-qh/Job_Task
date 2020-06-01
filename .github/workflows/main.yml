@@ -23,7 +23,7 @@ jobs:
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         BRANCH: gh-pages # 分支
-        FOLDER: /.vuepress/dist # 文件路径
+        FOLDER: .vuepress/dist # 文件路径
     #- name: Build
     #  uses: JamesIves/github-pages-deploy-action@master
     #env:
