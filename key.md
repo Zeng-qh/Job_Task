@@ -13,6 +13,19 @@ publish: true
 <!-- more -->
 192.168.8.130（千与田） 用户名：administrator 密码：QiDian2017
 
+nckdoyychnyccfab   17@
+
+soquorislmovbceg   97@
+
+##  外网访问地址
+http://2g31l80720.51mypc.cn/Login.html
+http://sdzkj.imwork.net:10079/Login.html
+
+## 五鑫
+http://192.168.1.251:189/login.html
+
+## 千与田
+http://192.168.8.130/login.html
 
 
 ## Key
@@ -79,4 +92,7 @@ VS code
 |40. AfterDisPostAct|  反过账后
 |41. AfterFinish|  完成后
 |42. AfterDisFinish| 反完成后
+
+
+
 
