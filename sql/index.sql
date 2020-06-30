@@ -1,0 +1,32 @@
+use [MouldLao_Pf_Test]
+
+
+select * from Hr_Maker
+
+
+use [MouldLao_Zi_Test]
+
+select *from Sys_DictionaryMutl
+
+
+
+-- 清理数据库 log 文件
+USE [master]
+ALTER DATABASE CHIYODA_Config
+SET RECOVERY SIMPLE WITH NO_WAIT
+ALTER DATABASE CHIYODA_Config
+SET RECOVERY SIMPLE
+GO
+USE CHIYODA_Config
+DECLARE @logname VARCHAR(150)
+SELECT @logname = NAME
+FROM   sys.database_files
+WHERE  NAME LIKE'%log'
+DBCC SHRINKFILE(@logname, 11, TRUNCATEONLY)
+GO
+USE [master]
+ALTER DATABASE CHIYODA_Config
+SET RECOVERY FULL WITH NO_WAIT
+ALTER DATABASE CHIYODA_Config 
+SET RECOVERY FULL
+GO

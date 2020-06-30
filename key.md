@@ -11,11 +11,17 @@ publish: true
 ![img]()
 
 <!-- more -->
-192.168.8.130（千与田） 用户名：administrator 密码：QiDian2017
+
+
+蒲公英VPN :   wggfcusmq123
+Pwd:    poiuytrewq123
+
 
 nckdoyychnyccfab   17@
 
 soquorislmovbceg   97@
+
+192.168.8.130（千与田） 用户名：administrator 密码：QiDian2017
 
 ##  外网访问地址
 http://2g31l80720.51mypc.cn/Login.html
@@ -26,6 +32,11 @@ http://192.168.1.251:189/login.html
 
 ## 千与田
 http://192.168.8.130/login.html
+
+## 天键创客
+http://120.77.240.50/login.html　 admin admin123
+
+服务器  192.168.1.251 用户名 administrator  密码 QiDian2017
 
 
 ## Key
@@ -94,5 +105,56 @@ VS code
 |42. AfterDisFinish| 反完成后
 
 
+## 前端：
+
+CSS代码生成器
+
+CSS3 Generator
+
+终极CSS Generator
+
+CSS Grid布局生成器
+
+静态站点生成器
+
+Next.js
+
+Gatsby
+
+SVG 优化器
+
+SVGOMG
+
+SVG Optimizers
+
+动画库
+
+Animate.css
+
+GreenSock (GSAP)
+
+Anime.js
+
+跨浏览器测试
+
+Caniuse
+
+Am I Responsive?
+
+Responsive Web Design Checker
+
+BrowserStack
+
+代码协作和游乐场
+
+GitHub
+
+CodePen
+
+JSFiddle
+
+SoloLearn
+
+jsrun.net
 
 

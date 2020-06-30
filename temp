@@ -1,0 +1,74 @@
+--JobItemResult：打卡结果(0正常，1迟到，2早退，3请假，4缺勤)
+--JobItemType 上下班设置(0上班，1下班，2加班上班，3加班下班)
+declare @month varchar(10)=  '[&Months]' 
+declare @beginDate datetime
+declare @endDate datetime
+set @beginDate=cast(@month+'-1' as datetime)
+set @endDate=DATEADD(mm,1,@beginDate);
+--所有出勤记录
+select 
+case
+ when b.DaysType='当天' then 
+DATEADD(MINUTE,cast(SUBSTRING(a.JobItemTime,4,2) as int), DATEADD(HH,cast(SUBSTRING(a.JobItemTime,1,2) as int),ClockDate))
+ when b.DaysType='明天' then
+DATEADD(Day,1,DATEADD(MINUTE,cast(SUBSTRING(a.JobItemTime,4,2) as int), DATEADD(HH,cast(SUBSTRING(a.JobItemTime,1,2) as int),ClockDate)))
+end  as FullJobItemTime,
+a.*,
+b.HJI as JobItem into #t 
+ from Hr_ClockResultDetail as a with(nolock)
+ left join Hr_JobItemDetail as b with(nolock) on a.JobItemId=b.id
+  where  ClockDate>=@beginDate and ClockDate<@endDate
+ 
+--正常出勤记录(以上班打卡记录判断出勤天数，如员工上班班次中设置需打上班卡（不包含加班上班）2次，如果当天实际只打了一次上班卡，则判断出勤0.5天)
+declare @defaultJobItem varchar(50) =(select top 1 HJI from Hr_JobItem where IsDefault=1)
+select * into #t1 from (
+	select a.*,
+	a.CotClock*1.0/(select COUNT(*) from Hr_JobItemDetail where HJI=isnull(nullif(a.JobItem,''),@defaultJobItem) and NorOn=1) as WorkDays
+	 from (
+		select ClockDate,SID,JobItem,count(*) as CotClock  from #t 
+		where JobItemClockTime<>'' and IsHolidays=0 and JobItemType=0 and JobItemResult in (0,1,2)
+		group by ClockDate,SID,JobItem
+	) a 
+	left join Hr_Staff b on a.SID=b.SID
+) t 
+--加班小时
+select SID,TimeType,sum(ActualHour) as ActualHour into #t2 from (
+select a.SID,a.ActualHour,b.OwrDate,b.TimeType from Hr_OverWorkReqDetail a inner join Hr_OverWorkReq as b with(nolock) on a.OWR=b.OWR 
+	where b.Status ='已审核' and b.OwrDate>=@beginDate and b.OwrDate<@endDate
+union all
+select a.SID,a.ActualHour,b.ReqDate,b.TimeType from Hr_OverWorkEspyReqDetail a inner join Hr_OverWorkEspyReq  as b with(nolock) on a.OWER=b.OWER 
+	where b.Status='已审核' and b.ReqDate>=@beginDate and b.ReqDate<@endDate
+) t group by SID,TimeType
+select * from (
+select a.SID,a.Name,c.DeptName,d.MkName,e.text as HrTypeName,
+(select sum(WorkDays) from #t1 where SID=a.SID) as WorkDays, --出勤天数
+isnull((select sum(ActualHour) from #t2 where #t2.SID=a.SID and TimeType=0),0) as GnWorkHours,--平时加班小时
+isnull((select sum(ActualHour) from #t2 where #t2.SID=a.SID and TimeType=1),0) as HoWorkHours,--休日加班小时
+(select count(*) from #t where #t.SID=a.SID and JobItemResult=1 and IsHolidays=0) as CotLate, --迟到次数
+isnull((select sum(DATEDIFF(Minute,FullJobItemTime,JobItemClockTime)) from #t where SID=a.SID and JobItemResult=1 and IsHolidays=0),0) as QtyLate,--迟到分钟
+(select count(*) from #t where #t.SID=a.SID and JobItemResult=2 and IsHolidays=0) as CotLeave, --早退次数
+isnull((select sum(DATEDIFF(Minute,JobItemClockTime,FullJobItemTime)) from #t where SID=a.SID and JobItemResult=2 and IsHolidays=0),0) as QtyLeave,--早退分钟
+(select count(*) from #t where #t.SID=a.SID and JobItemResult=4 and IsHolidays=0) as CotAbsm, --缺勤次数
+isnull((select sum(DATEDIFF(d,BeginDate,EndDate)) from  Hr_ShiftsWork 
+	where StaffId=a.SID and BeginDate>=@beginDate and EndDate<=@endDate),0) as ShiftDays, --倒班天数
+isnull((select sum(ActDays) from Hr_BussTrip where StaffId=a.SID and Status='已审核' and BeginDate>=@beginDate and BeginDate<=@endDate),0) as QtyBusTrip,--出差天数
+isnull((select sum(ActDats) from Hr_LeaveReq 
+	where StaffId=a.SID and Status='已审核' and BeginDate>=@beginDate and BeginDate<=@endDate and IsCancel=0 and IsSalary=0),0) as QtyLeaveReq,--无薪假天数
+isnull((select sum(ActDats) from Hr_LeaveReq 
+	where StaffId=a.SID and Status='已审核' and BeginDate>=@beginDate and BeginDate<=@endDate and IsCancel=0 and IsSalary=1),0) as QtySLeaveReq--有薪假天数
+ from Hr_Staff a 
+ left join Hr_GenlHoliday as b with(nolock) on a.GenlHoliday=b.HGH
+ left join Hr_Dept  as c with(nolock) on a.DeptCode=c.DeptCode
+ left join Hr_Maker as d with(nolock) on a.MkCode=d.MkCode
+ left join v_HrType as e with(nolock) on a.HrType=e.id
+where ((a.JobStatus in ('在职' ,'试用期') and BeginDate<=@endDate) or (a.JobStatus not in ('在职' ,'试用期') and EndDate>@beginDate))
+	and c.DeptCode=  '[&DeptName]' 
+	and d.MkCode= '[&MkName]' 
+	and NoClockIn=0 
+	and a.SID=  '[&SID]' 
+	and a.HrType= '[&HrType]' 
+	
+) t 
+drop table #t
+drop table #t1
+drop table #t2
