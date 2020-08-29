@@ -6,24 +6,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
 </head>
+<!-- Bootstrap4 核心 CSS 文件 -->
+<link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+<script src="./node_modules/jquery/dist/jquery.js"></script>
+
+<script src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script src="./node_modules/clipboard/dist/clipboard.js"></script>
 <script>
     let str = 'string GoodsId, string StoreId, string LotNo, string GoodsStatus, decimal Quantity, string mkCode'
     function GetParameterType(str) {
-        str = ' ' + str
+        if (str == "" || str == undefined) {
+            return
+        } else
+            str = ' ' + str
         let strS = []
         str.split(',').forEach(element => {
             // console.dir(element.split(' ')[1]);     
             strS.push(element.split(' ')[1])
         })
-        console.dir("参数一共" + strS.length + "个")
+        SetText("参数一共" + strS.length + "个", strS.toString())
         console.dir(strS.toString())
     }
-    GetParameterType(str)
+
+
+
+
+    // $( Get()        // GetAPI()    )
+
+    function GetAPI() {
+        $.ajax({
+            type: "Get",
+            url: "baidu.com",
+            dataType: "json",
+            success: function (data) {
+                SetJSON(data)
+            },
+            error: function (e) {
+                SetJSON(e)
+            }
+        });
+    }
+
+    function PostAPI() {
+        $.ajax({
+            type: "post",
+            url: "",
+            data: {
+                name: "6666666",
+                age: 18,
+                sex: "男"
+            },
+            dataType: "json",
+            success: function (data) {
+                SetJSON(data)
+            },
+            error: function (e) {
+                SetJSON(e)
+            }
+        });
+    }
+
+    function JSONClear() {
+        let btn = $("#json")[0];
+        btn.textContent = ``;
+    }
+
+    function SetJSON(data) {
+        JSONClear()
+        let btn = $("#json")[0];
+        btn.textContent = JSON.stringify(data, null, ' ');
+    }
+    function SetText(label, data) {
+        JSONClear()
+        $("label")[0].textContent = ``
+        $("label")[0].textContent = label
+        $("#json")[0].textContent = data
+    }
+
+    function Get() {
+        $.ajax({
+            url: "http://127.0.0.1:3000/api",
+            // context: document.body,
+            crossDomain: true
+        }).done(function (data) {
+            console.dir(data);
+            $("#json").append(data);
+        }).fail(function (error) {
+            console.dir(error);
+        });
+    }
+
+
+    // Copy
+    var clipboard = new ClipboardJS('.btn');
+
+    clipboard.on('success', function (e) {
+        console.info('Action:', e.action);
+        console.info('Text:', e.text);
+        console.info('Trigger:', e.trigger);
+
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function (e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
 </script>
 
 <body>
-    <div>
-        
+    <div class="container">
+        <div class="input-group flex-nowrap">
+            <input type="text" class="form-control" placeholder="GetParameterType" aria-label="GetParameterType"
+                aria-describedby="addon-wrapping" onblur="GetParameterType(this.value)">
+        </div>
+        <label id="label"></label>
+        <pre><code id="json"></code></pre>
+        <button id="JSONClear" onclick="JSONClear()">JSONClear</button>
+        <button id="Copy" data-clipboard-action="cut" data-clipboard-target="#json">Copy</button>
     </div>
 </body>
 
