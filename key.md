@@ -158,3 +158,15 @@ SoloLearn
 jsrun.net
 
 
+
+## VS Code
+Ctrl + K Ctrl + j  展开
+Ctrl + K Ctrl + 0 零   折叠
+
+
+## VS 
+Ctrl + M Ctrl +O     折叠
+Ctrl + M Ctrl +P     展开
+
+
+

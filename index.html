@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<script>
+    let str = 'string GoodsId, string StoreId, string LotNo, string GoodsStatus, decimal Quantity, string mkCode'
+    function GetParameterType(str) {
+        str = ' ' + str
+        let strS = []
+        str.split(',').forEach(element => {
+            // console.dir(element.split(' ')[1]);     
+            strS.push(element.split(' ')[1])
+        })
+        console.dir("参数一共" + strS.length + "个")
+        console.dir(strS.toString())
+    }
+    GetParameterType(str)
+</script>
+
+<body>
+    <div>
+        
+    </div>
+</body>
+
+</html>
